@@ -1,356 +1,90 @@
-# RAG-System-with-Checkpoints
+# Conversation Memory & Persona Chatbot
 
+A lightweight Retrieval-Augmented Generation (RAG) chatbot that reads uploaded chat conversations and lets you ask questions about them — what topics came up, what the person is like, how they communicate, and more.
 
-## Overview
-
-This project implements an end-to-end Retrieval-Augmented Generation (RAG) system for analyzing conversation datasets. The system processes conversations chronologically, detects topic changes, creates topic checkpoints, generates message checkpoints, extracts user persona information, and provides a chatbot interface for answering questions about the user.
-
-The chatbot combines topic summaries, message chunks, and persona information to generate meaningful answers based only on the uploaded conversation dataset.
-
-The project does not rely on external LLM APIs and uses lightweight embedding models for semantic retrieval.
+The project runs entirely offline for its core logic using embeddings, keyword signals, and simple heuristics. No external APIs are required.
 
 ---
 
-# Problem Statement
+## What It Does
 
-Given a CSV file containing conversations, where each row represents one day's conversation, the objective is to:
+Upload a CSV file where each row represents one day's conversation. The system processes messages chronologically and builds two things:
 
-* Process conversations in chronological order.
-* Detect topic changes dynamically.
-* Create topic checkpoints.
-* Generate summaries for every 100 messages.
-* Extract user persona information.
-* Build a chatbot that answers questions using retrieved context and persona data.
+1. **A searchable memory** of conversations using topic checkpoints and 100-message checkpoints.
+2. **A persona profile** containing habits, personality traits, communication style, and personal facts.
 
----
+Once processed, you can ask questions like:
 
-# Features
-
-* Chronological message processing
-* Dynamic topic checkpoint generation
-* Independent 100-message checkpoints
-* Semantic retrieval using embeddings
-* Persona extraction from conversations
-* Streamlit chatbot interface
-* JSON output generation
-* Lightweight architecture without external APIs
+* *What kind of person is this user?*
+* *What are their habits?*
+* *How do they communicate?*
+* *What topics do they discuss most often?*
+* *Did they mention anything about Python or interviews?*
 
 ---
 
-# Project Architecture
+## Project Structure
 
 ```text
-CSV Dataset
-      │
-      ▼
-Preprocessing
-      │
-      ▼
-Chronological Messages
-      │
-      ├──────────────► Topic Checkpoints
-      │
-      ├──────────────► 100 Message Checkpoints
-      │
-      └──────────────► Persona Extraction
-                            │
-                            ▼
-                    persona.json
-                            │
-                            ▼
-                  Semantic Retrieval
-                            │
-                            ▼
-                       Chatbot
-```
-
----
-
-# Folder Structure
-
-```text
-rag_system/
-│
-├── app.py
-├── requirements.txt
-├── README.md
-│
-├── data/
+.
+├── src/
+│   ├── loader.py          # CSV loading and message extraction
+│   ├── checkpointer.py    # Topic checkpoints and 100-message checkpoints
+│   ├── persona.py         # Persona extraction from conversation signals
+│   ├── retriever.py       # Embedding-based retrieval
+│   └── generator.py       # Answer generation
 │
 ├── outputs/
-│     ├── topic_checkpoints.json
-│     ├── message_100_checkpoints.json
-│     └── persona.json
+│   ├── topic_checkpoints.json
+│   ├── message_100_checkpoints.json
+│   └── persona.json
 │
-└── src/
-      ├── __init__.py
-      ├── preprocess.py
-      ├── topic_checkpoint.py
-      ├── message_checkpoint.py
-      ├── persona_extractor.py
-      ├── retriever.py
-      └── chatbot.py
+├── pipeline.py
+├── app.py
+├── requirements.txt
+└── README.md
 ```
 
 ---
 
-# Part 1: RAG System with Checkpoints
+## How to Run
 
-## Chronological Processing
-
-The CSV dataset is processed message by message while preserving chronological order.
-
-Each row corresponds to one day's conversation.
-
-The preprocessing stage:
-
-1. Reads the CSV file.
-2. Splits conversations into individual messages.
-3. Assigns unique message IDs.
-4. Maintains the original order of messages.
-
----
-
-# Topic Checkpoints
-
-The entire conversation is not treated as one topic.
-
-Instead, topic changes are detected during processing.
-
-Whenever a topic shift occurs:
-
-* A new topic checkpoint is created.
-* Start and end message IDs are stored.
-* A topic summary is generated.
-
-Example:
-
-```text
-Topic 1 → messages 1–25 → summary
-
-Topic 2 → messages 26–60 → summary
-
-Topic 3 → messages 61–90 → summary
-```
-
----
-
-# Topic Change Detection
-
-Topic changes are detected using topic keyword signals.
-
-The system compares consecutive messages.
-
-If:
-
-* topic signals no longer overlap, and
-* the current topic has enough messages,
-
-then a new topic checkpoint is created.
-
-This ensures that unrelated conversations are separated into different topic segments.
-
----
-
-# 100 Message Checkpoints
-
-Independent checkpoints are generated for every 100 chronological messages.
-
-Each checkpoint contains:
-
-* Start message ID
-* End message ID
-* Number of messages
-* Summary
-* Original messages
-
-These checkpoints are independent of topic checkpoints.
-
----
-
-# Retrieval System
-
-The chatbot follows a two-stage retrieval process.
-
-## Stage 1: Topic Retrieval
-
-Relevant topic summaries are retrieved from topic checkpoints.
-
----
-
-## Stage 2: Message Retrieval
-
-Relevant message chunks are retrieved from the selected topics.
-
----
-
-## Stage 3: Context Construction
-
-Retrieved topic summaries and message chunks are combined to form the final context.
-
-This context is then used to answer the user query.
-
----
-
-# Embedding Model
-
-The project uses:
-
-### SentenceTransformer
-
-Model:
-
-```text
-all-MiniLM-L6-v2
-```
-
-The embeddings are compared using cosine similarity.
-
-This provides semantic retrieval without relying on external APIs.
-
----
-
-# Part 2: Persona Extraction
-
-Persona information is generated only from uploaded conversation signals.
-
-No external knowledge or hardcoded personal information is used.
-
-The system stores persona information in JSON format.
-
----
-
-## Habits
-
-Habits represent repeated behavioral patterns observed in conversations.
-
-Examples:
-
-* Frequently asks for simple explanations.
-* Frequently requests code and step-by-step guidance.
-
----
-
-## Interests
-
-Recurring topics discussed by the user.
-
-Examples:
-
-* Career and jobs
-* AI and Machine Learning
-* Data analysis and Excel
-
----
-
-## Personality Traits
-
-Traits inferred from repeated conversation signals.
-
-Examples:
-
-* Goal-oriented
-* Learning-oriented
-* Practical
-
----
-
-## Communication Style
-
-The system identifies:
-
-* Language
-* Message length
-* Tone
-* Emoji usage
-
----
-
-## Personal Facts
-
-Personal facts are extracted only when strong evidence exists in the conversations.
-
----
-
-# Part 3: Chatbot
-
-The chatbot answers questions such as:
-
-### What kind of person is this user?
-
-### What are their habits?
-
-### How do they talk?
-
-The chatbot uses:
-
-* Topic checkpoints
-* Message checkpoints
-* Persona JSON
-
-to generate responses.
-
----
-
-# Output Files
-
-## topic_checkpoints.json
-
-Stores topic segments and their summaries.
-
----
-
-## message_100_checkpoints.json
-
-Stores summaries for every 100 messages.
-
----
-
-## persona.json
-
-Stores:
-
-* Habits
-* Interests
-* Personality traits
-* Communication style
-* Personal facts
-
----
-
-# Technologies Used
-
-* Python
-* Streamlit
-* Pandas
-* Scikit-learn
-* Sentence Transformers
-* LangChain Community
-* JSON
-
----
-
-# Installation
-
-Clone the repository:
+### 1. Clone the Repository
 
 ```bash
 git clone https://github.com/pranali1911/RAG-System-with-Checkpoints.git
-```
-
-Move to project directory:
-
-```bash
 cd RAG-System-with-Checkpoints
 ```
 
-Install dependencies:
+### 2. Install Dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-Run the application:
+### 3. Prepare the Dataset
+
+Place the CSV file inside the project directory.
+
+Each row should contain one day's conversation.
+
+Messages inside a row should follow a format similar to:
+
+```text
+User 1: Hello
+User 2: Hi
+
+User 1: How are you?
+User 2: Fine
+```
+
+### 4. Process the Conversations
+
+```bash
+python pipeline.py --input your_file.csv
+```
+
+### 5. Start the Chatbot
 
 ```bash
 streamlit run app.py
@@ -358,38 +92,258 @@ streamlit run app.py
 
 ---
 
-# Hosted Application
+## How Each Part Works
+
+# Part 1 — Building the RAG System
+
+### Topic Checkpoints
+
+The system tracks how conversations evolve over time instead of treating the entire dataset as one large block.
+
+Each message is checked for topic signals such as:
+
+* `job`
+* `resume`
+* `python`
+* `ai`
+* `data`
+* `project`
+
+When consecutive messages stop sharing these signals, a topic change is detected.
+
+Each topic checkpoint stores:
+
+* Start message ID
+* End message ID
+* Topic summary
+
+Example:
+
+```text
+Topic 1 → Messages 1–28
+Resume building and job applications
+
+Topic 2 → Messages 29–61
+Python coding and debugging
+
+Topic 3 → Messages 62–90
+Excel formulas and data cleaning
+```
+
+The approach is intentionally lightweight and does not rely on clustering or LLM calls.
+
+---
+
+### 100-Message Checkpoints
+
+These checkpoints are independent of topic checkpoints.
+
+After every 100 messages, the system creates a checkpoint containing:
+
+* Start message ID
+* End message ID
+* Number of messages
+* Summary
+* Original messages
+
+These checkpoints provide an additional retrieval layer when information is spread across large conversations.
+
+---
+
+### Retrieval
+
+When a user asks a question, the system:
+
+1. Embeds the query using Sentence Transformers.
+2. Compares it with topic checkpoint summaries.
+3. Retrieves the top matching topics.
+4. Retrieves the most relevant messages from those topics.
+5. Combines both into the final context used to generate the answer.
+
+The embedding model used is:
+
+```text
+all-MiniLM-L6-v2
+```
+
+Since everything runs locally, there are no API calls or rate limits.
+
+---
+
+# Part 2 — Persona Extraction
+
+The persona is built entirely from conversation signals.
+
+No assumptions or external knowledge are used.
+
+Information is stored in:
+
+```text
+outputs/persona.json
+```
+
+---
+
+### Habits
+
+Repeated patterns observed across conversations.
+
+Examples:
+
+* Frequently asks for simple explanations.
+* Prefers step-by-step guidance.
+* Requests complete code solutions.
+
+---
+
+### Personal Facts
+
+Information is extracted only when strong evidence exists.
+
+Examples include repeated mentions of:
+
+* Family
+* Relationships
+* Pets
+* Daily routines
+
+Single occurrences are ignored to avoid unreliable conclusions.
+
+---
+
+### Personality Traits
+
+Traits are inferred from recurring conversation patterns.
+
+Examples:
+
+* Goal-oriented
+* Learning-oriented
+* Practical
+
+Each trait is supported by evidence found in the conversations.
+
+---
+
+### Communication Style
+
+The system analyzes:
+
+* Language usage
+* Message length
+* Emoji usage
+* Overall tone
+
+The communication profile is derived directly from textual signals.
+
+---
+
+# Part 3 — The Chatbot
+
+Questions about the user are answered directly from the persona profile.
+
+Examples:
+
+* *What kind of person is this user?*
+* *What are their habits?*
+* *How do they communicate?*
+
+Questions about events or topics use the retrieval pipeline.
+
+Examples:
+
+* *What did they discuss about Python?*
+* *Did they mention any job interviews?*
+* *What topics appeared most frequently?*
+
+---
+
+## Dependencies
+
+```text
+sentence-transformers
+scikit-learn
+langchain-community
+pandas
+```
+
+The model
+
+```text
+all-MiniLM-L6-v2
+```
+
+is downloaded automatically during the first run and occupies approximately 80 MB.
+
+---
+
+## Live Demo
+
+### Hosted Application
+
+The Streamlit application is available here:
 
 https://rag-system-with-checkpoints-jmyqrvkvlwpumydfds6mqc.streamlit.app/
 
----
+### GitHub Repository
 
-# GitHub Repository
+Source code:
 
 https://github.com/pranali1911/RAG-System-with-Checkpoints
 
----
+### Video Walkthrough
 
-# Demo Video
-
-Loom Link:
+Complete demo video:
 
 https://www.loom.com/share/44d6e7df903441b386d7ae8fdd20d987
 
 ---
 
-# Screenshots
+## Screenshots
 
-<img width="1722" height="912" alt="Screenshot 2026-06-18 182242" src="https://github.com/user-attachments/assets/a164e499-706b-4e4b-8e2c-6bc5deb0f7e7" />
+### Chatbot Interface
 
-<img width="1917" height="947" alt="image" src="https://github.com/user-attachments/assets/0fcfc876-cdac-42c7-994c-7424bf5d7fbe" />
+<img width="1722" height="912" alt="Chatbot Interface" src="https://github.com/user-attachments/assets/a164e499-706b-4e4b-8e2c-6bc5deb0f7e7" />
 
+### Persona Extraction and Question Answering
 
+<img width="1917" height="947" alt="Persona Extraction Output" src="https://github.com/user-attachments/assets/0fcfc876-cdac-42c7-994c-7424bf5d7fbe" />
 
 ---
 
-# Author
+## Limitations Worth Knowing
 
-**Pranali Rahangdale**
+* Topic detection is keyword-based, so it may miss subtle topic shifts.
+* Persona extraction requires repeated evidence before a signal is accepted.
+* The 100-message summaries are intentionally simple.
+* Hindi detection relies on common markers and may not capture every variation.
 
-MCA Graduate | Python Developer | AI/ML Enthusiast
+These trade-offs keep the system lightweight and allow it to run fully offline without external APIs.
+
+---
+
+## Technologies Used
+
+* Python
+* Pandas
+* Scikit-learn
+* Sentence Transformers
+* LangChain Community
+* Streamlit
+* JSON
+
+---
+
+## Future Improvements
+
+* Add FAISS-based vector storage.
+* Improve topic segmentation.
+* Support multiple users.
+* Enhance persona extraction.
+* Add conversation visualization.
+
+---
+
+## License
+
+This project is intended for educational and research purposes.
