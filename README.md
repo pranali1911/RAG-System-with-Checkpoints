@@ -1,6 +1,5 @@
 # RAG-System-with-Checkpoints
 
-# RAG System with Checkpoints and Persona Chatbot
 
 ## Overview
 
@@ -375,7 +374,7 @@ https://github.com/pranali1911/RAG-System-with-Checkpoints
 
 Loom Link:
 
-(Add Loom video URL here)
+https://www.loom.com/share/44d6e7df903441b386d7ae8fdd20d987
 
 ---
 
@@ -383,9 +382,7 @@ Loom Link:
 
 <img width="1722" height="912" alt="Screenshot 2026-06-18 182242" src="https://github.com/user-attachments/assets/a164e499-706b-4e4b-8e2c-6bc5deb0f7e7" />
 
-
-
-<img width="1912" height="946" alt="image" src="https://github.com/user-attachments/assets/b239d314-1938-4712-b354-2ec459ab5a32" />
+<img width="1917" height="947" alt="image" src="https://github.com/user-attachments/assets/0fcfc876-cdac-42c7-994c-7424bf5d7fbe" />
 
 
 
