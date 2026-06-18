@@ -1,53 +1,58 @@
 {
     "habits": [
         {
-            "habit": "Frequently asks for simple explanations and learning support",
-            "evidence": "Learning-related terms appeared 15624 times."
+            "habit": "Shows sleep or daily routine related signals",
+            "evidence": "Sleep, wake-up, morning, or night routine signals appear repeatedly."
         },
         {
-            "habit": "Frequently asks for direct outputs, code, or step-by-step guidance",
-            "evidence": "Direct-output related terms appeared 352 times."
+            "habit": "Shows food or eating routine signals",
+            "evidence": "Food, eating, or diet-related routine signals appear repeatedly."
         }
     ],
-    "interests": [
+    "personal_facts": [
         {
-            "interest": "Career, jobs, resumes, interviews, and applications",
-            "evidence": "Career-related terms appeared 3488 times."
+            "fact": "Family-related conversations are present",
+            "evidence": "Family-related words such as parents, siblings, or family appear in the uploaded conversations."
         },
         {
-            "interest": "Technical topics such as Python, AI/ML, RAG, and chatbots",
-            "evidence": "Technical terms appeared 7630 times."
+            "fact": "Pet-related conversations are present",
+            "evidence": "Pet-related words such as dog, cat, or pets appear in the uploaded conversations."
         },
         {
-            "interest": "Data analysis, Excel, formulas, dashboards, and analytics",
-            "evidence": "Data/Excel-related terms appeared 16 times."
+            "fact": "Social or relationship-related conversations are present",
+            "evidence": "Words related to friends, children, or relationships appear in the uploaded conversations."
         }
     ],
-    "personal_facts": [],
     "personality_traits": [
         {
             "trait": "Goal-oriented",
-            "evidence": "Repeated career and application-related conversations were found."
+            "meaning": "The user often focuses on career, tasks, and completing work.",
+            "evidence": "Career, job, resume, interview, or application-related conversations appear repeatedly."
         },
         {
             "trait": "Learning-oriented",
-            "evidence": "Repeated requests for explanations and learning support were found."
+            "meaning": "The user tries to understand concepts in a simple way.",
+            "evidence": "Many messages ask for simple explanations, meanings, and learning support."
         },
         {
             "trait": "Practical",
-            "evidence": "Repeated requests for ready-to-use answers, code, and steps were found."
+            "meaning": "The user prefers useful and ready-to-use answers.",
+            "evidence": "Several messages request complete code, direct answers, steps, or ready-made solutions."
         }
     ],
     "communication_style": {
         "language": "Hindi-English mixed",
         "message_length": "Short and direct",
-        "tone": "Direct and task-focused",
+        "tone": "Task-focused and direct",
         "emoji_usage": "Low emoji usage",
         "evidence": {
+            "language_evidence": "Hindi-English words appear repeatedly.",
+            "message_length_evidence": "Most messages are short and ask for specific help.",
+            "emoji_evidence": "Very few emoji characters appear in the conversations.",
             "hindi_marker_count": 707,
             "average_words_per_message": 13.34,
             "emoji_count": 1
         }
     },
-    "evidence_note": "Persona is generated only from uploaded CSV conversation signals."
+    "evidence_note": "Persona is generated only from uploaded conversation signals, not guesses."
 }
