@@ -1,0 +1,11 @@
+langchain-community
+pandas
+sentence-transformers
+torch
+streamlit
+pandas
+langchain-community
+sentence-transformers
+torch
+scikit-learn
+numpy

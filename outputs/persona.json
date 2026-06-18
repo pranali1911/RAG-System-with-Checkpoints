@@ -1,0 +1,53 @@
+{
+    "habits": [
+        {
+            "habit": "Frequently asks for simple explanations and learning support",
+            "evidence": "Learning-related terms appeared 15624 times."
+        },
+        {
+            "habit": "Frequently asks for direct outputs, code, or step-by-step guidance",
+            "evidence": "Direct-output related terms appeared 352 times."
+        }
+    ],
+    "interests": [
+        {
+            "interest": "Career, jobs, resumes, interviews, and applications",
+            "evidence": "Career-related terms appeared 3488 times."
+        },
+        {
+            "interest": "Technical topics such as Python, AI/ML, RAG, and chatbots",
+            "evidence": "Technical terms appeared 7630 times."
+        },
+        {
+            "interest": "Data analysis, Excel, formulas, dashboards, and analytics",
+            "evidence": "Data/Excel-related terms appeared 16 times."
+        }
+    ],
+    "personal_facts": [],
+    "personality_traits": [
+        {
+            "trait": "Goal-oriented",
+            "evidence": "Repeated career and application-related conversations were found."
+        },
+        {
+            "trait": "Learning-oriented",
+            "evidence": "Repeated requests for explanations and learning support were found."
+        },
+        {
+            "trait": "Practical",
+            "evidence": "Repeated requests for ready-to-use answers, code, and steps were found."
+        }
+    ],
+    "communication_style": {
+        "language": "Hindi-English mixed",
+        "message_length": "Short and direct",
+        "tone": "Direct and task-focused",
+        "emoji_usage": "Low emoji usage",
+        "evidence": {
+            "hindi_marker_count": 707,
+            "average_words_per_message": 13.34,
+            "emoji_count": 1
+        }
+    },
+    "evidence_note": "Persona is generated only from uploaded CSV conversation signals."
+}
